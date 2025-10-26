@@ -1,11 +1,29 @@
-# Vite React Express Template
+# IP Map Navigator
+A React + TypeScript web app with an Express.js backend that allows users to log in, view their IP geolocation, search for other IPs, and keep a history of searches with map visualization.
+---
+## Features
 
-This Template helps you get started quickly with a modern TypeScript-based stack featuring:
+### Authentication
+- Login screen with email and password.
+- Validates credentials against seeded users in the database.
+- Redirects users to Home screen upon successful login.
+- Persistent login state with session management.
 
-- React
-- Vite
-- Express.js API server
-- TypeScript across both frontend and backend
+### Home Screen
+- Displays the logged-in user’s IP & geolocation.
+- Allows entering a new IP address to fetch its geolocation.
+- Shows error messages for invalid IP addresses.
+- Displays a searchable history of previous IP lookups.
+- Map visualization using Leaflet with pins for IP locations.
+- Delete multiple history entries via checkboxes.
+
+### Backend
+- Express.js REST API with TypeScript.
+- Endpoints:
+  - `POST /api/login` → Login endpoint.
+  - `GET /api/health` → Health check `{ status: "ok" }`.
+  - Optional: Other endpoints for IP history management.
+- CORS enabled and JSON body parsing out-of-the-box.
 
 ---
 
@@ -36,7 +54,7 @@ npm install
 The PORTS are:
 
 - 9000 for the client
-- 9001 for the server
+- 8000 for the server
 
 To run both the frontend and backend concurrently in development mode:
 
@@ -57,12 +75,16 @@ Alternatively, you can run them independently:
 
 ---
 
-### Health Check & Example API
+### Database Seed
+
+- `{ email: "test@example.com", password: "password123" }` 
+---
+
+### Health Check
 
 Express server includes:
 
 - `GET /api/health` → `{ status: "ok" }`
-- `GET /api/hello` → `{ message: "Hello World!" }`
 
 These are defined in [`app.ts`](./src/server/app.ts).
 
@@ -83,16 +105,6 @@ To run formatting:
 ```bash
 npm run format
 ```
-
----
-
-### Environment Variables
-
-Create a `.env` file to configure environment variables. Copy the `.env.example` and rename it to `.env`.
-
-| Key  | Description                        | Value |
-| ---- | ---------------------------------- | ----- |
-| PORT | Port number for the Express server | 9001  |
 
 ---
 

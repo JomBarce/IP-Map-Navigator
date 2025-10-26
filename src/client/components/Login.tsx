@@ -2,28 +2,28 @@ import { useState } from 'react';
 import logoGif from '../assets/gif/map.gif';
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      if (!res.ok) throw new Error("Invalid credentials");
+      if (!res.ok) throw new Error('Invalid credentials');
 
       const data = await res.json();
-      localStorage.setItem("user", JSON.stringify(data));
-      window.location.href = "/home";
+      localStorage.setItem('user', JSON.stringify(data));
+      window.location.href = '/home';
     } catch (err) {
-      setError("Invalid email or password");
+      setError('Invalid email or password');
     }
   };
 
@@ -31,7 +31,9 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <img src={logoGif} alt="Map Logo" className="w-50 h-50 mx-auto mb-4" />
-        <h1 className="text-3xl font-bold text-center mb-4 text-blue-500">IP Map Navigator</h1>
+        <h1 className="text-3xl font-bold text-center mb-4 text-blue-500">
+          IP Map Navigator
+        </h1>
         <h2 className="text-xl font-semibold mb-6">Login</h2>
 
         <form className="flex flex-col gap-4" onSubmit={handleLogin}>
@@ -39,7 +41,7 @@ function Login() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
             className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
@@ -47,7 +49,7 @@ function Login() {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
             className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
@@ -59,9 +61,7 @@ function Login() {
           </button>
         </form>
 
-        {error && (
-          <p className="text-red-500 text-center mt-4">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-center mt-4">{error}</p>}
       </div>
     </div>
   );

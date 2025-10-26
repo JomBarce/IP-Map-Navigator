@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import type { LatLngExpression } from "leaflet";
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import type { LatLngExpression } from 'leaflet';
 
 import userImg from '../assets/icons/profile.png';
 
@@ -10,11 +10,11 @@ import userImg from '../assets/icons/profile.png';
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
   iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
 interface GeoData {
@@ -36,37 +36,39 @@ function MapUpdater({ center }: { center: LatLngExpression }) {
 
 function Home() {
   const [geo, setGeo] = useState<GeoData | null>(null);
-  const [ip, setIp] = useState("");
-  const [activeTab, setActiveTab] = useState<"search" | "history" | "account">("search");
-  const [popup, setPopup] = useState("");
+  const [ip, setIp] = useState('');
+  const [activeTab, setActiveTab] = useState<'search' | 'history' | 'account'>(
+    'search'
+  );
+  const [popup, setPopup] = useState('');
   const [history, setHistory] = useState<string[]>(() => {
-    const saved = localStorage.getItem("history");
+    const saved = localStorage.getItem('history');
     return saved ? JSON.parse(saved) : [];
   });
   const [selectedHistory, setSelectedHistory] = useState<string[]>([]);
   const [deleteMode, setDeleteMode] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   // Fetch initial IP info
   useEffect(() => {
-    fetch("https://ipinfo.io/geo")
+    fetch('https://ipinfo.io/geo')
       .then((res) => res.json())
       .then((data) => setGeo(data));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("history", JSON.stringify(history));
+    localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
   const showPopup = (message: string) => {
     setPopup(message);
-    setTimeout(() => setPopup(""), 3000);
-  }
+    setTimeout(() => setPopup(''), 3000);
+  };
 
   const handleSearch = async () => {
     const ipPattern = /^(?:\d{1,3}\.){3}\d{1,3}$/;
     if (!ipPattern.test(ip)) {
-      showPopup("Invalid IP address");
+      showPopup('Invalid IP address');
       return;
     }
     try {
@@ -74,15 +76,15 @@ function Home() {
       const data = await res.json();
       setGeo(data);
       setHistory((prev) => (prev.includes(ip) ? prev : [...prev, ip]));
-      setIp("");
+      setIp('');
     } catch (err) {
-      showPopup("Error fetching IP info");
+      showPopup('Error fetching IP info');
     }
   };
 
   const handleClear = async () => {
-    setIp("");
-    const res = await fetch("https://ipinfo.io/geo");
+    setIp('');
+    const res = await fetch('https://ipinfo.io/geo');
     const data = await res.json();
     setGeo(data);
   };
@@ -91,30 +93,30 @@ function Home() {
     const res = await fetch(`https://ipinfo.io/${selectedIp}/geo`);
     const data = await res.json();
     setGeo(data);
-    setActiveTab("search");
+    setActiveTab('search');
   };
 
   const toggleSelectHistory = (ip: string) => {
-    setSelectedHistory(prev =>
-      prev.includes(ip) ? prev.filter(item => item !== ip) : [...prev, ip]
+    setSelectedHistory((prev) =>
+      prev.includes(ip) ? prev.filter((item) => item !== ip) : [...prev, ip]
     );
   };
 
   const handleDeleteSelected = () => {
-    const updated = history.filter(ip => !selectedHistory.includes(ip));
+    const updated = history.filter((ip) => !selectedHistory.includes(ip));
     setHistory(updated);
     setSelectedHistory([]);
-    localStorage.setItem("history", JSON.stringify(updated));
+    localStorage.setItem('history', JSON.stringify(updated));
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    window.location.href = "/";
+    localStorage.removeItem('user');
+    window.location.href = '/';
   };
 
   const getLatLng = (): LatLngExpression => {
     if (!geo) return [0, 0];
-    const [lat, lng] = geo.loc.split(",").map(Number);
+    const [lat, lng] = geo.loc.split(',').map(Number);
     return [lat, lng];
   };
 
@@ -144,32 +146,32 @@ function Home() {
         <div className="flex justify-between mb-4 border-b border-gray-300">
           <button
             className={`py-2 px-3 ${
-              activeTab === "search" ? "border-b-2 border-blue-500" : ""
+              activeTab === 'search' ? 'border-b-2 border-blue-500' : ''
             }`}
-            onClick={() => setActiveTab("search")}
+            onClick={() => setActiveTab('search')}
           >
             Search
           </button>
           <button
             className={`py-2 px-3 ${
-              activeTab === "history" ? "border-b-2 border-blue-500" : ""
+              activeTab === 'history' ? 'border-b-2 border-blue-500' : ''
             }`}
-            onClick={() => setActiveTab("history")}
+            onClick={() => setActiveTab('history')}
           >
             History
           </button>
           <button
             className={`py-2 px-3 ${
-              activeTab === "account" ? "border-b-2 border-blue-500" : ""
+              activeTab === 'account' ? 'border-b-2 border-blue-500' : ''
             }`}
-            onClick={() => setActiveTab("account")}
+            onClick={() => setActiveTab('account')}
           >
             Account
           </button>
         </div>
 
         {/* Tab Content */}
-        {activeTab === "search" && (
+        {activeTab === 'search' && (
           <div className="flex flex-col gap-2">
             <input
               id="ip_input"
@@ -196,17 +198,27 @@ function Home() {
 
             {geo && (
               <div className="mt-2 text-sm space-y-1">
-                <p><b>IP:</b> {geo.ip}</p>
-                <p><b>City:</b> {geo.city}</p>
-                <p><b>Region:</b> {geo.region}</p>  
-                <p><b>Country:</b> {geo.country}</p>
-                <p><b>Location:</b> {geo.loc}</p>
+                <p>
+                  <b>IP:</b> {geo.ip}
+                </p>
+                <p>
+                  <b>City:</b> {geo.city}
+                </p>
+                <p>
+                  <b>Region:</b> {geo.region}
+                </p>
+                <p>
+                  <b>Country:</b> {geo.country}
+                </p>
+                <p>
+                  <b>Location:</b> {geo.loc}
+                </p>
               </div>
             )}
           </div>
         )}
 
-        {activeTab === "history" && (
+        {activeTab === 'history' && (
           <div className="flex flex-col max-h-64 overflow-y-auto text-sm">
             {history.length === 0 ? (
               <p className="text-gray-500 text-center">No history yet.</p>
@@ -219,11 +231,11 @@ function Home() {
                     onClick={() => setDeleteMode(!deleteMode)}
                     className={`text-sm px-2 py-1 rounded ${
                       deleteMode
-                        ? "bg-red-100 text-red-600 hover:bg-red-200"
-                        : "bg-gray-100 hover:bg-gray-200"
+                        ? 'bg-red-100 text-red-600 hover:bg-red-200'
+                        : 'bg-gray-100 hover:bg-gray-200'
                     }`}
                   >
-                    {deleteMode ? "Cancel" : "Delete"}
+                    {deleteMode ? 'Cancel' : 'Delete'}
                   </button>
                 </div>
 
@@ -243,12 +255,12 @@ function Home() {
                           />
                         )}
                         <button
-                          disabled={deleteMode} 
+                          disabled={deleteMode}
                           onClick={() => handleSelectHistory(item)}
                           className={`text-left w-full ${
                             deleteMode
-                              ? "cursor-not-allowed text-gray-400"
-                              : "cursor-pointer"
+                              ? 'cursor-not-allowed text-gray-400'
+                              : 'cursor-pointer'
                           }`}
                         >
                           {item}
@@ -272,15 +284,19 @@ function Home() {
           </div>
         )}
 
-        {activeTab === "account" && (
+        {activeTab === 'account' && (
           <div className="flex flex-col gap-2 text-sm">
             <img
               src={userImg}
               alt="User Profile"
               className="w-20 h-20 rounded-full border border-gray-300 shadow-sm mx-auto"
             />
-            <p><b>Name:</b> {user?.user?.name}</p>
-            <p><b>Email:</b> {user?.user?.email}</p>
+            <p>
+              <b>Name:</b> {user?.user?.name}
+            </p>
+            <p>
+              <b>Email:</b> {user?.user?.email}
+            </p>
             <button
               onClick={handleLogout}
               className="mt-2 bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
